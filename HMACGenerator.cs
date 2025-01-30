@@ -10,36 +10,26 @@ namespace $safeprojectname$
 {
     internal class HMACGenerator
     {
-        private readonly byte[] secretKey;
+        private readonly byte[] key;
 
         public HMACGenerator()
         {
-            secretKey = GenerateSecretKey();
+            key = RandomNumberGenerator.GetBytes(32); // Generuj losowy klucz
         }
 
-        public byte[] GenerateSecretKey()
+        public string ComputeHMAC(string value)
         {
-            using (var rng = RandomNumberGenerator.Create())
+            using (var hmac = new HMACSHA256(key))
             {
-                byte[] key = new byte[32];
-                rng.GetBytes(key);
-                return key;
-            }
-        }
-
-        public string ComputeHMAC(int message)
-        {
-            using (var hmac = new HMACSHA256(secretKey))
-            {
-                byte[] messageBytes = Encoding.UTF8.GetBytes(message.ToString());
-                byte[] hash = hmac.ComputeHash(messageBytes);
-                return BitConverter.ToString(hash).Replace("-", "").ToLower();
+                byte[] valueBytes = System.Text.Encoding.UTF8.GetBytes(value);
+                byte[] hashBytes = hmac.ComputeHash(valueBytes);
+                return BitConverter.ToString(hashBytes).Replace("-", "");
             }
         }
 
         public string RevealKey()
         {
-            return BitConverter.ToString(secretKey).Replace("-", "").ToLower();
+            return BitConverter.ToString(key).Replace("-", "");
         }
     }
 }
