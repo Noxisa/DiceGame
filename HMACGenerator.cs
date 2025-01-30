@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Win32.SafeHandles;
 using System.Security.Cryptography;
 
-namespace $safeprojectname$
+namespace Tasks3
 {
     internal class HMACGenerator
     {
@@ -14,7 +14,7 @@ namespace $safeprojectname$
 
         public HMACGenerator()
         {
-            key = RandomNumberGenerator.GetBytes(32); // Generuj losowy klucz
+            key = RandomNumberGenerator.GetBytes(32); 
         }
 
         public string ComputeHMAC(string value)
